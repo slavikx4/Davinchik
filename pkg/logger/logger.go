@@ -6,12 +6,14 @@ import (
 )
 
 // Logger сам логер, который используется во всём проекте
-var Logger logger
+var (
+	Logger *logger
+)
 
 func init() {
 
 	//выдаём ключи
-	flagsFile := os.O_APPEND | os.O_CREATE | os.O_WRONLY
+	flagsFile := os.O_APPEND | os.O_CREATE
 	flagsLog := log.Ldate | log.Ltime | log.Lshortfile
 
 	//создаём дириккторию для хранения файлов
@@ -20,15 +22,15 @@ func init() {
 	}
 
 	//открываем файлы или создаём, если такого нет
-	fileProcess, err := os.OpenFile("history-loggers/log_process.log", flagsFile, 0666)
+	fileProcess, err := os.OpenFile("history-loggers/log_process.txt", flagsFile, 0666)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fileError, err := os.OpenFile("history-loggers/log_error.log", flagsFile, 0666)
+	fileError, err := os.OpenFile("history-loggers/log_error.txt", flagsFile, 0666)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fileChat, err := os.OpenFile("history-loggers/log_chat.log", flagsFile, 0666)
+	fileChat, err := os.OpenFile("history-loggers/log_chat.txt", flagsFile, 0666)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -39,7 +41,7 @@ func init() {
 	loggerChat := log.New(fileChat, "CHAT:	", flagsLog)
 
 	//инициализируем наш логер
-	Logger = logger{
+	Logger = &logger{
 		Process: loggerInfo,
 		Error:   loggerError,
 		Chat:    loggerChat,
